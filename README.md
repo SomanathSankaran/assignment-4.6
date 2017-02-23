@@ -13,7 +13,7 @@ i = intermediate factor. It is usually 1/3 or 1/4. Hadoop's working space dedica
 Data Size – 600 TB
 Replication factor – 3
 Intermediate data – 1/4
-Total Storage requirement – 1*3*600*4/3 = 2400 TB
+Total Storage requirement – 1*3*600/(1-1/4) = 2400 TB
 Available disk size for storage – 7 TB
 Total number of required data nodes (approx.): 2400/7 = 350 machines
 
