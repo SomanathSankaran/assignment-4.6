@@ -2,24 +2,29 @@
 QN-1.1.If 7TB is the available disk space per node (9 disks with 1 TB, 2 disk for operating system etc.
 were excluded.). Assuming initial data size is 600 TB. How will you estimate the number of data
 nodes (n)?
+ This is a formula to estimate Hadoop storage (H):
+H=c*r*S/(1-i) 
 
-Rough calculation:
-
+where: 
+c = average compression ratio. It depends on the type of compression used (Snappy, LZOP, ...) and size of the data. When no compression is used, c=1. 
+r = replication factor. It is usually 3 in a production cluster. 
+S = size of data to be moved to Hadoop. This could be a combination of historical data and incremental data. The incremental data can be daily for example and projected over a period of time (3 years for example). 
+i = intermediate factor. It is usually 1/3 or 1/4. Hadoop's working space dedicated to storing intermediate results of Map phase
 Data Size – 600 TB
 Replication factor – 3
-Intermediate data – 1
-Total Storage requirement – (3+1) * 600 = 2400 TB
+Intermediate data – 1/4
+Total Storage requirement – 1*3*600*4/3 = 2400 TB
 Available disk size for storage – 7 TB
 Total number of required data nodes (approx.): 2400/7 = 350 machines
 
-Actual Calculation: Rough Calculation + Disk space utilization + Compression ratio
 
-Disk space utilization – 65 % (differ business to business)
+Actual Calculation(Including compression ratio and disk space utilisation)
+Disk space utilization factor– 65 % (differ business to business)
 Compression ratio – 2.3
 Total Storage requirement – 2400/2.3 = 1043.5 TB
 Available disk size for storage – 7*0.65 = 4.55 TB
 Total number of required data nodes (approx.): 1043.5/4.55 = 230 machines
-Actual usable cluster size (100 %): (230*8*2.3)/4 = 1058 TB
+Actual usable cluster size (100 %): (230*7*2.3)/4 = 1058 TB
 QN-2 Imagine that you are uploading a file of 500MB into HDFS.100MB of data is successfully
 uploaded into HDFS and another client wants to read the uploaded data while the upload is still in
 progress. What will happen in such a scenario, will the 100 MB of data that is uploaded will it be
